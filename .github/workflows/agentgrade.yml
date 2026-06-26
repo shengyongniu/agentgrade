@@ -1,0 +1,28 @@
+# SECURITY: `agentgrade test` IMPORTS AND RUNS the Python code referenced by
+# agentgrade.yaml (the agent entrypoint and any `plugins:`). Only run this on
+# trusted, same-repo branches. Do NOT use the `pull_request_target` trigger and
+# do NOT run this workflow against untrusted pull requests from forks, or you
+# would execute attacker-controlled code with repository access.
+name: agentgrade
+
+on: [pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  agentgrade:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install agentgrade
+        run: pip install -e .
+
+      - name: Run agent regression tests
+        run: agentgrade test --config examples/simple_agent/agentgrade.yaml

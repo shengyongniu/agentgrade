@@ -1,0 +1,34 @@
+agent:
+  type: python
+  entrypoint: examples.ddp_coding_agent.agent:run_agent
+
+tests:
+  - name: ddp_training_script_complete
+    input: "Write a complete, launch-ready PyTorch DDP training script."
+    checks:
+      - type: contains
+        value: "DistributedSampler"
+        weight: 0.2
+        agent_name: CoderAgent
+      - type: contains
+        value: "DistributedDataParallel"
+        weight: 0.2
+        agent_name: CoderAgent
+      - type: contains
+        value: "init_process_group"
+        weight: 0.2
+        agent_name: CoderAgent
+      - type: regex
+        value: "torchrun|python -m torch.distributed.run"
+        weight: 0.2
+        agent_name: CriticAgent
+      - type: max_latency
+        seconds: 30
+        weight: 0.1
+      - type: max_cost
+        usd: 1.0
+        weight: 0.1
+
+settings:
+  fail_below_reward: 0.75
+  output_dir: ".agentgrade"

@@ -1,0 +1,24 @@
+agent:
+  type: python
+  entrypoint: examples.inferred_agent.agent:run_agent
+
+plugins:
+  - examples.inferred_agent.plugins:register
+
+tests:
+  - name: summarizer
+    input: "Summarize the given text into a structured payload."
+    checks:
+      - type: contains
+        value: "summary"
+        weight: 0.4
+      - type: not_contains
+        value: "TODO"
+        weight: 0.3
+      - type: min_length
+        min_chars: 50
+        weight: 0.3
+
+settings:
+  fail_below_reward: 0.75
+  output_dir: ".agentgrade"

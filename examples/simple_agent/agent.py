@@ -1,0 +1,91 @@
+"""A deterministic, offline, scripted multi-agent pipeline (Coder -> Critic).
+
+This example intentionally produces an INCOMPLETE PyTorch DDP training script
+so that agentgrade's checks fail and credit assignment has a real culprit to
+point at. No API keys, fully deterministic.
+
+The CoderAgent omits ``DistributedSampler`` and the launch command. The
+CriticAgent reviews the code and adds ``init_process_group`` /
+``DistributedDataParallel`` but still does not add the missing sampler or a
+``torchrun`` launch command — so the demo fails in a way that names specific
+agents.
+"""
+
+from __future__ import annotations
+
+from agentgrade.integrations import TraceRecorder
+from agentgrade.trace import AgentTrace
+
+
+def _coder_agent(task: str) -> str:
+    """Produce a first-draft DDP script that omits required elements."""
+
+    return (
+        "import torch\n"
+        "import torch.nn as nn\n"
+        "from torch.utils.data import DataLoader\n\n"
+        "def train():\n"
+        "    model = nn.Linear(10, 10).cuda()\n"
+        "    loader = DataLoader(dataset, batch_size=32, shuffle=True)\n"
+        "    optimizer = torch.optim.SGD(model.parameters(), lr=0.01)\n"
+        "    for batch in loader:\n"
+        "        optimizer.zero_grad()\n"
+        "        loss = model(batch).sum()\n"
+        "        loss.backward()\n"
+        "        optimizer.step()\n\n"
+        "if __name__ == '__main__':\n"
+        "    train()\n"
+    )
+
+
+def _critic_agent(task: str, draft: str) -> str:
+    """Review the draft and add process-group + DDP wrapping (still partial)."""
+
+    reviewed = draft.replace(
+        "def train():\n",
+        (
+            "def train():\n"
+            "    torch.distributed.init_process_group(backend='nccl')\n"
+            "    local_rank = torch.distributed.get_rank()\n"
+        ),
+    )
+    reviewed = reviewed.replace(
+        "    model = nn.Linear(10, 10).cuda()\n",
+        (
+            "    model = nn.Linear(10, 10).cuda(local_rank)\n"
+            "    model = torch.nn.parallel.DistributedDataParallel(model, device_ids=[local_rank])\n"
+        ),
+    )
+    return reviewed
+
+
+def run_agent(task: str) -> tuple[str, AgentTrace]:
+    """Run the Coder -> Critic pipeline and return ``(final_output, trace)``."""
+
+    rec = TraceRecorder(test_name="ddp_training_script")
+
+    draft = _coder_agent(task)
+    rec.step(
+        "CoderAgent",
+        input=task,
+        output=draft,
+        tool_name="codegen",
+        tool_input={"task": task},
+        tool_output="drafted training loop",
+        latency_ms=120,
+        cost_usd=0.004,
+    )
+
+    reviewed = _critic_agent(task, draft)
+    rec.step(
+        "CriticAgent",
+        input=draft,
+        output=reviewed,
+        tool_name="review",
+        tool_input={"draft_len": len(draft)},
+        tool_output="added init_process_group + DDP wrapper",
+        latency_ms=90,
+        cost_usd=0.003,
+    )
+
+    return reviewed, rec.finalize(final_output=reviewed)

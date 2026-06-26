@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agentgrade"
+version = "0.1.0"
+description = "Pytest for multi-agent systems: regression tests, credit assignment, and prompt patches for AI agent workflows."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "agentgrade contributors" }]
+keywords = ["agents", "llm", "testing", "ci", "evaluation", "credit-assignment"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Software Development :: Testing",
+]
+dependencies = [
+    "typer>=0.12",
+    "pyyaml>=6.0",
+    "rich>=13.0",
+    "pydantic>=2.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0"]
+langgraph = ["langgraph>=1.0", "langchain-core>=0.3"]
+
+[project.scripts]
+agentgrade = "agentgrade.cli:app"
+
+[project.urls]
+Homepage = "https://github.com/agentgrade/agentgrade"
+Source = "https://github.com/agentgrade/agentgrade"
+
+[tool.setuptools.packages.find]
+include = ["agentgrade*"]
+exclude = ["examples*", "tests*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
