@@ -6,15 +6,32 @@ build-backend = "setuptools.build_meta"
 name = "agentgrade"
 version = "0.1.0"
 description = "Pytest for multi-agent systems: regression tests, credit assignment, and prompt patches for AI agent workflows."
-readme = "README.md"
+readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.10"
-license = { text = "MIT" }
-authors = [{ name = "agentgrade contributors" }]
-keywords = ["agents", "llm", "testing", "ci", "evaluation", "credit-assignment"]
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Shengyong Niu", email = "niu.shengyong@gmail.com" }]
+keywords = [
+    "ai-agents",
+    "agents",
+    "testing",
+    "ci",
+    "llm",
+    "multi-agent",
+    "pytest",
+    "langgraph",
+    "evaluation",
+]
 classifiers = [
-    "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Environment :: Console",
     "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Software Development :: Testing",
 ]
 dependencies = [
@@ -35,6 +52,8 @@ agentgrade = "agentgrade.cli:app"
 Homepage = "https://github.com/shengyongniu/agentgrade"
 Repository = "https://github.com/shengyongniu/agentgrade"
 Issues = "https://github.com/shengyongniu/agentgrade/issues"
+Documentation = "https://github.com/shengyongniu/agentgrade#readme"
+Changelog = "https://github.com/shengyongniu/agentgrade/blob/master/CHANGELOG.md"
 
 [tool.setuptools.packages.find]
 include = ["agentgrade*"]

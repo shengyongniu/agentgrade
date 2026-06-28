@@ -110,3 +110,55 @@ step. Use `agentgrade/integrations/langgraph.py` as a template:
 
 By contributing you agree that your contributions are licensed under the project's
 [MIT License](LICENSE).
+
+## Releasing
+
+agentgrade is published to [PyPI](https://pypi.org/project/agentgrade/) automatically
+by the [`publish.yml`](.github/workflows/publish.yml) GitHub Actions workflow using
+**PyPI Trusted Publishing (OIDC)** — no API tokens are stored in the repo.
+
+### One-time setup (maintainer, on PyPI)
+
+1. Create a PyPI account at https://pypi.org and (if needed) create/own the
+   `agentgrade` project.
+2. Add a Trusted Publisher: go to pypi.org → your project → **Manage** →
+   **Publishing**, and add a new GitHub Actions publisher with:
+   - **Owner**: `shengyongniu`
+   - **Repository**: `agentgrade`
+   - **Workflow name**: `publish.yml`
+   - **Environment**: `pypi`
+
+   For a brand-new project with no release yet, use the **pending publisher** form
+   on your account's Publishing page with the same four values.
+
+### Per release
+
+1. Bump `version` in `pyproject.toml` and add a `CHANGELOG.md` entry.
+2. Commit, then tag and push the tag:
+
+   ```bash
+   git commit -am "Release vX.Y.Z"
+   git tag vX.Y.Z
+   git push origin master
+   git push origin vX.Y.Z
+   ```
+
+3. Create a GitHub Release for the tag, which triggers `publish.yml`:
+
+   ```bash
+   gh release create vX.Y.Z --generate-notes
+   ```
+
+   The workflow builds the sdist + wheel and uploads them to PyPI over OIDC.
+
+### Manual fallback (API token)
+
+If you prefer to publish from your machine instead of OIDC:
+
+```bash
+python -m pip install --upgrade build twine
+python -m build
+twine check dist/*
+twine upload dist/*        # prompts for a PyPI API token (use __token__ as username)
+```
+

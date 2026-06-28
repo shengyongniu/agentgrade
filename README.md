@@ -16,7 +16,7 @@ The headline feature: **when an agent workflow fails, agentgrade tells you _whic
 tool, or handoff likely caused the failure** — and suggests a deterministic prompt patch
 to fix it.
 
-![agentgrade test failing a multi-agent run and pinning the blame on CoderAgent and CriticAgent](assets/demo.gif)
+![agentgrade test failing a multi-agent run and pinning the blame on CoderAgent and CriticAgent](https://raw.githubusercontent.com/shengyongniu/agentgrade/master/assets/demo.gif)
 
 ## Why this exists
 
@@ -108,7 +108,7 @@ agentgrade test --config examples/simple_agent/agentgrade.yaml
 
 ## Demo
 
-![agentgrade test failing a multi-agent run and pinning the blame on CoderAgent and CriticAgent](assets/demo.gif)
+![agentgrade test failing a multi-agent run and pinning the blame on CoderAgent and CriticAgent](https://raw.githubusercontent.com/shengyongniu/agentgrade/master/assets/demo.gif)
 
 The bundled `simple_agent` is a scripted **Coder → Critic** pipeline that deliberately
 ships an incomplete DDP script. Running it fails the reward threshold and names the
