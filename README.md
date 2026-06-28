@@ -16,6 +16,8 @@ The headline feature: **when an agent workflow fails, agentgrade tells you _whic
 tool, or handoff likely caused the failure** — and suggests a deterministic prompt patch
 to fix it.
 
+![agentgrade test failing a multi-agent run and pinning the blame on CoderAgent and CriticAgent](assets/demo.gif)
+
 ## Why this exists
 
 Eval dashboards tell you *that* your agents regressed; they rarely tell you *who* did it.
@@ -106,11 +108,20 @@ agentgrade test --config examples/simple_agent/agentgrade.yaml
 
 ## Demo
 
-<!-- TODO: replace with asciinema/GIF of `agentgrade test` failing demo -->
+![agentgrade test failing a multi-agent run and pinning the blame on CoderAgent and CriticAgent](assets/demo.gif)
 
 The bundled `simple_agent` is a scripted **Coder → Critic** pipeline that deliberately
 ships an incomplete DDP script. Running it fails the reward threshold and names the
-culprits (exit code `1`, so CI fails the build):
+culprits (exit code `1`, so CI fails the build).
+
+> The demo above is a committed, self-hosted recording — no external host. Re-render it
+> from the checked-in [`assets/demo.cast`](assets/demo.cast) with
+> `agg assets/demo.cast assets/demo.gif`, or regenerate the whole thing with
+> `bash scripts/demo.sh`. A static, dependency-light SVG version lives at
+> [`assets/demo.svg`](assets/demo.svg).
+
+<details>
+<summary>Copy-pasteable example output (text fallback)</summary>
 
 ```text
 $ agentgrade test --config examples/simple_agent/agentgrade.yaml
@@ -147,6 +158,8 @@ $ agentgrade test --config examples/simple_agent/agentgrade.yaml
 JSON: .agentgrade/results/latest.json
 Markdown: .agentgrade/reports/latest.md
 ```
+
+</details>
 
 ## How it works
 
