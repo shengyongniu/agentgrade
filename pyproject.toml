@@ -32,8 +32,9 @@ langgraph = ["langgraph>=1.0", "langchain-core>=0.3"]
 agentgrade = "agentgrade.cli:app"
 
 [project.urls]
-Homepage = "https://github.com/agentgrade/agentgrade"
-Source = "https://github.com/agentgrade/agentgrade"
+Homepage = "https://github.com/shengyongniu/agentgrade"
+Repository = "https://github.com/shengyongniu/agentgrade"
+Issues = "https://github.com/shengyongniu/agentgrade/issues"
 
 [tool.setuptools.packages.find]
 include = ["agentgrade*"]
