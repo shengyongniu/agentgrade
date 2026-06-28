@@ -1,7 +1,7 @@
 # agentgrade
 
-[![PyPI version](https://img.shields.io/pypi/v/agentgrade.svg)](https://pypi.org/project/agentgrade/)
-[![Python versions](https://img.shields.io/pypi/pyversions/agentgrade.svg)](https://pypi.org/project/agentgrade/)
+[![PyPI version](https://img.shields.io/pypi/v/agentgrade.svg?cacheSeconds=300)](https://pypi.org/project/agentgrade/)
+[![Python versions](https://img.shields.io/pypi/pyversions/agentgrade.svg?cacheSeconds=300)](https://pypi.org/project/agentgrade/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![CI](https://github.com/shengyongniu/agentgrade/actions/workflows/ci.yml/badge.svg)](https://github.com/shengyongniu/agentgrade/actions/workflows/ci.yml)
 
