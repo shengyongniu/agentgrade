@@ -1,5 +1,6 @@
 import json
 import subprocess
+import sys
 from pathlib import Path
 
 import pytest
@@ -16,7 +17,6 @@ from agentgrade.runner import record_suite, run_suite
 from agentgrade.trace import EvaluationResult
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-VENV_CLI = REPO_ROOT / ".venv" / "bin" / "agentgrade"
 
 
 def _simple_config(tmp_path: Path, *, entrypoint: str | None = None, replay: bool = False) -> Path:
@@ -125,7 +125,7 @@ def test_json_cli_output_matches_latest_json(tmp_path, monkeypatch):
     cfg = load_config(cfg_path)
 
     proc = subprocess.run(
-        [str(VENV_CLI), "test", "--config", str(cfg_path), "--json"],
+        [sys.executable, "-m", "agentgrade", "test", "--config", str(cfg_path), "--json"],
         capture_output=True,
         text=True,
         cwd=REPO_ROOT,
